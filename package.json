@@ -4,7 +4,7 @@
   "description": "This is the auth service for mern space project",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "start:dev": "bun --hot src/server.ts",
+    "dev:bun": "bun --hot src/server.ts",
     "format": "prettier .",
     "format:check": "bun format -- --check",
     "format:fix": "bun format -- --write",
