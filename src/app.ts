@@ -1,9 +1,12 @@
-import { config } from "dotenv";
-config();
-
-import express from "express";
 import cors from "cors";
+import { config } from "dotenv";
+import express, { NextFunction, Request, Response } from "express";
+import { HttpError } from "http-errors";
 import morgan from "morgan";
+
+import { logger } from "./config/logger";
+
+config();
 
 const app = express();
 
@@ -32,5 +35,15 @@ app.all("*", (req, res) => {
 });
 
 // Gloabl error middleware
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
+  logger.error(err.message);
+  res.status(err.statusCode).json({
+    name: err.name,
+    statusCode: err.statusCode,
+    message: err.message,
+    details: [],
+  });
+});
 
 export default app;
