@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "Shivam Vijaywargi",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  }
 }
