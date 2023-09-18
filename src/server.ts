@@ -10,8 +10,12 @@ const startServer = (PORT: number) => {
       logger.info(`App is running at http://localhost:${PORT}`);
     });
   } catch (err: unknown) {
-    if (typeof err === "object" && err !== null && "message" in err) {
+    if (err instanceof Error) {
       logger.error(`Error while starting the server: ${err.message}`);
+
+      setTimeout(() => {
+        process.exit(1);
+      }, 1000);
     }
   }
 };
