@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 
 // Routes
 // Health Check Route
-app.get("/health-check", (req, res) => {
+app.get("/health-check", async (req, res) => {
   res.status(200).json({
     success: true,
     status: "OK",
@@ -38,11 +38,20 @@ app.all("*", (req, res) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   logger.error(err.message);
-  res.status(err.statusCode).json({
-    name: err.name,
-    statusCode: err.statusCode,
-    message: err.message,
-    details: [],
+
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+
+  res.status(statusCode).json({
+    success: false,
+    errors: [
+      {
+        type: err.name,
+        message,
+        path: "",
+        location: "",
+      },
+    ],
   });
 });
 
