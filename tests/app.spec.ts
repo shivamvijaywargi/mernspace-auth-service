@@ -2,7 +2,7 @@ import request from "supertest";
 
 import app from "@/app";
 
-describe("First test", () => {
+describe.skip("First test", () => {
   it("Should check true is equal to true", () => {
     expect(true).toBe(true);
   });

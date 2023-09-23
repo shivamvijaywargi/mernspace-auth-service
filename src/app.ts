@@ -5,6 +5,7 @@ import { HttpError } from "http-errors";
 import morgan from "morgan";
 
 import { logger } from "./config/logger";
+import authRouter from "./routes/auth.route";
 
 config();
 
@@ -25,6 +26,9 @@ app.get("/health-check", async (req, res) => {
     message: "Server is up",
   });
 });
+
+// Auth routes
+app.use("/auth", authRouter);
 
 // CatchAll - 404
 app.all("*", (req, res) => {
