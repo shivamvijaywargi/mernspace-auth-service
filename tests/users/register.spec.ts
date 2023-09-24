@@ -34,9 +34,9 @@ describe("POST /auth/register", () => {
       const response = await request(app).post("/auth/register").send(userData);
 
       // Assert
-      expect(response.headers["content-type"]).toEqual(
-        expect.stringContaining("json"),
-      );
+      expect(
+        (response.headers as Record<string, string>)["content-type"],
+      ).toEqual(expect.stringContaining("json"));
     });
   });
 
