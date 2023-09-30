@@ -3,6 +3,7 @@
   "tabWidth": 2,
   "semi": true,
   "singleQuote": false,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"],
   "plugins": ["@ianvs/prettier-plugin-sort-imports"],
   "importOrder": [
     "<BUILTIN_MODULES>",

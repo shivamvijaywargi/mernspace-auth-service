@@ -1,13 +1,13 @@
+import "dotenv/config";
+import "reflect-metadata";
+
 import cors from "cors";
-import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
 import morgan from "morgan";
 
 import { logger } from "./config/logger";
 import authRouter from "./routes/auth.route";
-
-config();
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(morgan("dev"));
 
 // Routes
 // Health Check Route
-app.get("/health-check", async (req, res) => {
+app.get("/health-check", (req, res) => {
   res.status(200).json({
     success: true,
     status: "OK",
