@@ -15,6 +15,6 @@ module.exports = {
   rules: {
     "no-console": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
-    "no-empty-function": "warn",
+    // "no-empty-function": "warn",
   },
 };
