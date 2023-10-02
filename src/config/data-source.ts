@@ -12,7 +12,8 @@ export const AppDataSource = new DataSource({
   username: CONFIG.DB_USERNAME,
   password: CONFIG.DB_PASSWORD,
   database: CONFIG.DB_NAME,
-  synchronize: CONFIG.NODE_ENV === "test" || CONFIG.NODE_ENV === "development",
+  // synchronize should be false in produciton, keep it always false, since we have beforeEach() blcok setup in tests (register.spec.ts)
+  synchronize: false,
   logging: false,
   entities: [User],
   migrations: [],

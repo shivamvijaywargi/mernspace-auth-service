@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 
 import { User } from "@/entity/User";
@@ -7,11 +8,20 @@ export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
   async create({ firstName, lastName, email, password }: IUserData) {
-    await this.userRepository.save({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+    try {
+      return await this.userRepository.save({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+    } catch (err) {
+      const error = createHttpError(
+        500,
+        "Failed to create user in the database",
+      );
+
+      throw error;
+    }
   }
 }

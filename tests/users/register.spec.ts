@@ -5,8 +5,6 @@ import app from "@/app";
 import { AppDataSource } from "@/config/data-source";
 import { User } from "@/entity/User";
 
-import { truncateTables } from "../utils";
-
 describe("POST /auth/register", () => {
   let connection: DataSource;
 
@@ -16,7 +14,8 @@ describe("POST /auth/register", () => {
 
   beforeEach(async () => {
     // Database Truncate
-    await truncateTables(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
   });
 
   afterAll(async () => {
@@ -81,6 +80,21 @@ describe("POST /auth/register", () => {
       expect(users[0].firstName).toBe(userData.firstName);
       expect(users[0].lastName).toBe(userData.lastName);
       expect(users[0].email).toBe(userData.email);
+    });
+
+    it("should return the ID of the created user", async () => {
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "Secret",
+      };
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      expect((response.body as User).id).toBe(1);
     });
   });
 
