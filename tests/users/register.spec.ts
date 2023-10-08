@@ -190,4 +190,25 @@ describe("POST /auth/register", () => {
       expect(users).toHaveLength(0);
     });
   });
+
+  describe("Fields are not in proper format", () => {
+    it("should trim the email field", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: " vjshivam5@gmail.com ",
+        password: "Secret",
+      };
+
+      // ACT
+      await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users[0].email).toBe("vjshivam5@gmail.com");
+    });
+  });
 });
