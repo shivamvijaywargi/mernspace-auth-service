@@ -14,6 +14,7 @@ export class UserService {
         lastName,
         email,
         password,
+        role: "customer",
       });
     } catch (err) {
       const error = createHttpError(

@@ -94,7 +94,31 @@ describe("POST /auth/register", () => {
       const response = await request(app).post("/auth/register").send(payload);
 
       // ASSERT
-      expect((response.body as User).id).toBe(1);
+      const userRepository = connection.getRepository(User);
+
+      const users = await userRepository.find();
+
+      expect((response.body as User).id).toBe(users[0].id);
+    });
+
+    it("should assign a customer role", async () => {
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "Secret",
+      };
+
+      // ACT
+      await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      const userRepository = connection.getRepository(User);
+
+      const users = await userRepository.find();
+
+      expect(users[0]).toHaveProperty("role");
+      expect(users[0].role).toBe("customer");
     });
   });
 
