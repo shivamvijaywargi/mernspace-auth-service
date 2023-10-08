@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { NextFunction, Response } from "express";
 import { Logger } from "winston";
 
@@ -20,12 +21,15 @@ export class AuthController {
       password: "Secret",
     });
 
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     try {
       const user = await this.userService.create({
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
       });
 
       this.logger.info(`User has been registered`, { id: user.id });
