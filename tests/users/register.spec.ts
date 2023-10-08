@@ -279,7 +279,7 @@ describe("POST /auth/register", () => {
       const payload = {
         firstName: "Shivam",
         lastName: "Vijaywargi",
-        email: " vjshivam5gmail.com ",
+        email: "vjshivam5gmail.com",
         password: "********",
       };
 
@@ -295,7 +295,7 @@ describe("POST /auth/register", () => {
       const payload = {
         firstName: "Shivam",
         lastName: "Vijaywargi",
-        email: " vjshivam5gmail.com ",
+        email: "vjshivam5gmail.com",
         password: "*******",
       };
 
