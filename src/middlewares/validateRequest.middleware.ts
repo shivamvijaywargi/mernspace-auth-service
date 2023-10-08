@@ -16,7 +16,7 @@ export const validateRequest =
         // If there are validation errors, send the errors along with the received value
         return res.status(400).json({
           success: false,
-          error: result.error.issues.map((e) => ({
+          errors: result.error.issues.map((e) => ({
             location: e.path[0],
             path: e.path[1],
             message: e.message,

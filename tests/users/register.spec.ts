@@ -31,7 +31,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // Act
@@ -47,7 +47,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // Act
@@ -65,7 +65,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // Act
@@ -88,7 +88,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // ACT
@@ -107,7 +107,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // ACT
@@ -128,7 +128,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       // ACT
@@ -150,7 +150,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "Secret",
+        password: "********",
       };
 
       const userRepository = connection.getRepository(User);
@@ -175,7 +175,70 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "",
-        password: "Secret",
+        password: "********",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      const users = await userRepository.find();
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+      expect(users).toHaveLength(0);
+    });
+
+    it("should return 400 status code if firstName is missing", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "********",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      const users = await userRepository.find();
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+      expect(users).toHaveLength(0);
+    });
+
+    it("should return 400 status code if lastName is missing", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "",
+        email: "vjshivam5@gmail.com",
+        password: "********",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      const users = await userRepository.find();
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+      expect(users).toHaveLength(0);
+    });
+
+    it("should return 400 status code if password is missing", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "",
       };
 
       const userRepository = connection.getRepository(User);
@@ -198,7 +261,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: " vjshivam5@gmail.com ",
-        password: "Secret",
+        password: "********",
       };
 
       // ACT
@@ -209,6 +272,57 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
 
       expect(users[0].email).toBe("vjshivam5@gmail.com");
+    });
+
+    it("should return 400 status code if email is invalid", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: " vjshivam5gmail.com ",
+        password: "********",
+      };
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+    });
+
+    it("should return 400 status code if password length is less than 8 characters", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: " vjshivam5gmail.com ",
+        password: "*******",
+      };
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+    });
+
+    it("should return an array of errors if email is missing", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: " vjshivam5gmail.com ",
+        password: "*******",
+      };
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      expect(response.body).toHaveProperty("errors");
+      expect(
+        Array.isArray((response.body as Record<string, string>).errors),
+      ).toBe(true);
     });
   });
 });
