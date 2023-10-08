@@ -140,6 +140,31 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
 
       expect(users[0].password).not.toBe(payload.password);
+      expect(users[0].password).toHaveLength(60);
+      expect(users[0].password).toMatch(/^\$2a\$\d+\$/);
+    });
+
+    it("should return 400 status code if email already exists", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "Secret",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      await userRepository.save({ ...payload, role: "customer" });
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      const users = await userRepository.find();
+
+      // ASSERT
+      expect(response.statusCode).toBe(400);
+      expect(users).toHaveLength(1);
     });
   });
 
