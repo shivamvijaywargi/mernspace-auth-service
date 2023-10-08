@@ -1,6 +1,7 @@
 import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 
+import { Roles } from "@/constatns";
 import { User } from "@/entity/User";
 import { IUserData } from "@/types";
 
@@ -14,7 +15,7 @@ export class UserService {
         lastName,
         email,
         password,
-        role: "customer",
+        role: Roles.CUSTOMER,
       });
     } catch (err) {
       const error = createHttpError(

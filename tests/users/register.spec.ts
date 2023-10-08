@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 
 import app from "@/app";
 import { AppDataSource } from "@/config/data-source";
+import { Roles } from "@/constatns";
 import { User } from "@/entity/User";
 
 describe("POST /auth/register", () => {
@@ -118,7 +119,7 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
 
       expect(users[0]).toHaveProperty("role");
-      expect(users[0].role).toBe("customer");
+      expect(users[0].role).toBe(Roles.CUSTOMER);
     });
   });
 
