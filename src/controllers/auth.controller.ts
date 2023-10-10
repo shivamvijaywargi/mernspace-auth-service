@@ -6,6 +6,7 @@ import createHttpError from "http-errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 
+import { CONFIG } from "@/config";
 import { UserService } from "@/services/user.service";
 import { IRegisterUserRequest } from "@/types";
 
@@ -61,7 +62,11 @@ export class AuthController {
         issuer: "auth-service",
       });
 
-      const refreshToken = "refreshToken";
+      const refreshToken = jwt.sign(payload, CONFIG.REFRESH_TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "1y",
+        issuer: "auth-service",
+      });
 
       res.cookie("accessToken", accessToken, {
         domain: "localhost",
