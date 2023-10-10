@@ -6,6 +6,8 @@ import { AppDataSource } from "@/config/data-source";
 import { Roles } from "@/constatns";
 import { User } from "@/entity/User";
 
+import { isJWT } from "../utils";
+
 describe("POST /auth/register", () => {
   let connection: DataSource;
 
@@ -165,6 +167,44 @@ describe("POST /auth/register", () => {
       // ASSERT
       expect(response.statusCode).toBe(400);
       expect(users).toHaveLength(1);
+    });
+
+    it("should return access token and refresh token inside a cookie", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "********",
+      };
+
+      // ACT
+      let accessToken = null;
+      let refreshToken = null;
+
+      const response = await request(app).post("/auth/register").send(payload);
+
+      interface IHeaders {
+        ["set-cookie"]: string[];
+      }
+
+      // ASSERT
+      const cookies = (response.headers as IHeaders)["set-cookie"] || [];
+
+      cookies.forEach((cookie) => {
+        if (cookie.startsWith("accessToken=")) {
+          accessToken = cookie.split(";")[0].split("=")[1];
+        }
+
+        if (cookie.startsWith("refreshToken=")) {
+          refreshToken = cookie.split(";")[0].split("=")[1];
+        }
+      });
+
+      expect(accessToken).not.toBeNull();
+      expect(refreshToken).not.toBeNull();
+
+      expect(isJWT(accessToken)).toBeTruthy();
     });
   });
 
