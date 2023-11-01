@@ -3,14 +3,16 @@ import path from "path";
 
 import createHttpError from "http-errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { Repository } from "typeorm";
 
 import { CONFIG } from "@/config";
-import { AppDataSource } from "@/config/data-source";
 import { MS_IN_YEAR } from "@/constants";
 import { RefreshToken } from "@/entity/RefreshToken";
 import { User } from "@/entity/User";
 
 export class TokenService {
+  constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
+
   generateAccessToken(payload: JwtPayload) {
     let privateKey: Buffer;
 
@@ -45,10 +47,7 @@ export class TokenService {
   }
 
   async persistRefreshToken(user: User) {
-    // Persist the refresh token in the DB
-    const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
-
-    const newRefreshToken = await refreshTokenRepository.save({
+    const newRefreshToken = await this.refreshTokenRepository.save({
       user: user,
       expiresAt: new Date(Date.now() + MS_IN_YEAR),
     });
