@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import { AppDataSource } from "@/config/data-source";
-import { logger } from "@/config/logger";
-import { AuthController } from "@/controllers/auth.controller";
-import { RefreshToken } from "@/entity/RefreshToken";
-import { User } from "@/entity/User";
-import { validateRequest } from "@/middlewares/validateRequest.middleware";
-import { TokenService } from "@/services/token.service";
-import { UserService } from "@/services/user.service";
-import { registerUserSchema } from "@/validations/auth.validation";
+import { AppDataSource } from "../config/data-source";
+import { logger } from "../config/logger";
+import { AuthController } from "../controllers/auth.controller";
+import { RefreshToken } from "../entity/RefreshToken";
+import { User } from "../entity/User";
+import { validateRequest } from "../middlewares/validateRequest.middleware";
+import { TokenService } from "../services/token.service";
+import { UserService } from "../services/user.service";
+import { registerUserSchema } from "../validations/auth.validation";
 
 const authRouter = Router();
 

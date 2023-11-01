@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 
-import { Roles } from "@/constants";
-import { User } from "@/entity/User";
-import { IUserData } from "@/types";
+import { Roles } from "../constants";
+import { User } from "../entity/User";
+import { IUserData } from "../types";
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}

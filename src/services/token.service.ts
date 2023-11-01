@@ -5,10 +5,10 @@ import createHttpError from "http-errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Repository } from "typeorm";
 
-import { CONFIG } from "@/config";
-import { MS_IN_YEAR } from "@/constants";
-import { RefreshToken } from "@/entity/RefreshToken";
-import { User } from "@/entity/User";
+import { CONFIG } from "../config";
+import { MS_IN_YEAR } from "../constants";
+import { RefreshToken } from "../entity/RefreshToken";
+import { User } from "../entity/User";
 
 export class TokenService {
   constructor(private refreshTokenRepository: Repository<RefreshToken>) {}

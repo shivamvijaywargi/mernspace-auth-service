@@ -2,9 +2,9 @@ import { NextFunction, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 
-import { TokenService } from "@/services/token.service";
-import { UserService } from "@/services/user.service";
-import { IRegisterUserRequest } from "@/types";
+import { TokenService } from "../services/token.service";
+import { UserService } from "../services/user.service";
+import { IRegisterUserRequest } from "../types";
 
 export class AuthController {
   constructor(

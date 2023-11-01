@@ -2,10 +2,9 @@ import "reflect-metadata";
 
 import { DataSource } from "typeorm";
 
-import { RefreshToken } from "@/entity/RefreshToken";
-import { User } from "@/entity/User";
-
 import { CONFIG } from ".";
+import { RefreshToken } from "../entity/RefreshToken";
+import { User } from "../entity/User";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -15,7 +14,7 @@ export const AppDataSource = new DataSource({
   password: CONFIG.DB_PASSWORD,
   database: CONFIG.DB_NAME,
   // synchronize should be false in produciton, keep it always false, since we have beforeEach() blcok setup in tests (register.spec.ts)
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: [User, RefreshToken],
   migrations: [],
