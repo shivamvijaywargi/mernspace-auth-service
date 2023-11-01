@@ -3,7 +3,8 @@ import { DataSource } from "typeorm";
 
 import app from "@/app";
 import { AppDataSource } from "@/config/data-source";
-import { Roles } from "@/constatns";
+import { Roles } from "@/constants";
+import { RefreshToken } from "@/entity/RefreshToken";
 import { User } from "@/entity/User";
 
 import { isJWT } from "../utils";
@@ -33,7 +34,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // Act
@@ -49,7 +50,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // Act
@@ -67,7 +68,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // Act
@@ -90,7 +91,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // ACT
@@ -109,7 +110,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // ACT
@@ -130,7 +131,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // ACT
@@ -152,7 +153,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       const userRepository = connection.getRepository(User);
@@ -175,7 +176,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // ACT
@@ -207,6 +208,32 @@ describe("POST /auth/register", () => {
       expect(isJWT(accessToken)).toBeTruthy();
       expect(isJWT(refreshToken)).toBeTruthy();
     });
+
+    it("should store the refresh token in the database", async () => {
+      // ARRANGE
+      const payload = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "password",
+      };
+
+      // ACT
+      const response = await request(app).post("/auth/register").send(payload);
+
+      // ASSERT
+      const refreshTokenRepo = connection.getRepository(RefreshToken);
+      // const tokens = await refreshTokenRepo.find();
+
+      const tokens = await refreshTokenRepo
+        .createQueryBuilder("refreshToken")
+        .where("refreshToken.userId = :userId", {
+          userId: (response.body as Record<string, string>).id,
+        })
+        .getMany();
+
+      expect(tokens).toHaveLength(1);
+    });
   });
 
   describe("Fields are missing", () => {
@@ -216,7 +243,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "",
-        password: "********",
+        password: "password",
       };
 
       const userRepository = connection.getRepository(User);
@@ -237,7 +264,7 @@ describe("POST /auth/register", () => {
         firstName: "",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       const userRepository = connection.getRepository(User);
@@ -258,7 +285,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "",
         email: "vjshivam5@gmail.com",
-        password: "********",
+        password: "password",
       };
 
       const userRepository = connection.getRepository(User);
@@ -302,7 +329,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: " vjshivam5@gmail.com ",
-        password: "********",
+        password: "password",
       };
 
       // ACT
@@ -321,7 +348,7 @@ describe("POST /auth/register", () => {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5gmail.com",
-        password: "********",
+        password: "password",
       };
 
       // ACT
