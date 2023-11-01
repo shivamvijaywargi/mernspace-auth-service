@@ -2,9 +2,6 @@ import { NextFunction, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 
-import { AppDataSource } from "@/config/data-source";
-import { MS_IN_YEAR } from "@/constants";
-import { RefreshToken } from "@/entity/RefreshToken";
 import { TokenService } from "@/services/token.service";
 import { UserService } from "@/services/user.service";
 import { IRegisterUserRequest } from "@/types";
@@ -43,13 +40,7 @@ export class AuthController {
 
       const accessToken = this.tokenService.generateAccessToken(payload);
 
-      // Persist the refresh token in the DB
-      const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
-
-      const newRefreshToken = await refreshTokenRepository.save({
-        user: user,
-        expiresAt: new Date(Date.now() + MS_IN_YEAR),
-      });
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
 
       const refreshToken = this.tokenService.generateRefreshToken({
         ...payload,

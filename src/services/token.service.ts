@@ -5,6 +5,10 @@ import createHttpError from "http-errors";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { CONFIG } from "@/config";
+import { AppDataSource } from "@/config/data-source";
+import { MS_IN_YEAR } from "@/constants";
+import { RefreshToken } from "@/entity/RefreshToken";
+import { User } from "@/entity/User";
 
 export class TokenService {
   generateAccessToken(payload: JwtPayload) {
@@ -38,5 +42,17 @@ export class TokenService {
     });
 
     return refreshToken;
+  }
+
+  async persistRefreshToken(user: User) {
+    // Persist the refresh token in the DB
+    const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
+
+    const newRefreshToken = await refreshTokenRepository.save({
+      user: user,
+      expiresAt: new Date(Date.now() + MS_IN_YEAR),
+    });
+
+    return newRefreshToken;
   }
 }
