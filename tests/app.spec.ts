@@ -1,6 +1,6 @@
 import request from "supertest";
 
-import app from "@/app";
+import app from "../src/app";
 
 describe.skip("First test", () => {
   it("Should check true is equal to true", () => {

@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 
@@ -70,6 +70,10 @@ export class AuthController {
     } catch (error) {
       return next(error);
     }
+  }
+
+  login(req: Request, res: Response) {
+    res.status(200).send();
   }
 }
 

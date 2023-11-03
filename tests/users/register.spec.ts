@@ -1,12 +1,11 @@
 import request from "supertest";
 import { DataSource } from "typeorm";
 
-import app from "@/app";
-import { AppDataSource } from "@/config/data-source";
-import { Roles } from "@/constants";
-import { RefreshToken } from "@/entity/RefreshToken";
-import { User } from "@/entity/User";
-
+import app from "../../src/app";
+import { AppDataSource } from "../../src/config/data-source";
+import { Roles } from "../../src/constants";
+import { RefreshToken } from "../../src/entity/RefreshToken";
+import { User } from "../../src/entity/User";
 import { isJWT } from "../utils";
 
 describe("POST /auth/register", () => {

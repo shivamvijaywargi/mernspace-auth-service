@@ -8,7 +8,10 @@ import { User } from "../entity/User";
 import { validateRequest } from "../middlewares/validateRequest.middleware";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
-import { registerUserSchema } from "../validations/auth.validation";
+import {
+  loginUserSchema,
+  registerUserSchema,
+} from "../validations/auth.validation";
 
 const authRouter = Router();
 
@@ -26,6 +29,10 @@ authRouter.post(
   "/register",
   validateRequest(registerUserSchema),
   (req, res, next) => authController.register(req, res, next),
+);
+
+authRouter.post("/login", validateRequest(loginUserSchema), (req, res, next) =>
+  authController.login(req, res, next),
 );
 
 export default authRouter;
