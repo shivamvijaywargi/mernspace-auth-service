@@ -4,12 +4,12 @@ import { Repository } from "typeorm";
 
 import { Roles } from "../constants";
 import { User } from "../entity/User";
-import { IUserData } from "../types";
+import { IUserRegisterData } from "../types";
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
-  async create({ firstName, lastName, email, password }: IUserData) {
+  async create({ firstName, lastName, email, password }: IUserRegisterData) {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (user) {
@@ -37,5 +37,9 @@ export class UserService {
 
       throw error;
     }
+  }
+
+  async findUserByEmail(email: string) {
+    return await this.userRepository.findOne({ where: { email } });
   }
 }
