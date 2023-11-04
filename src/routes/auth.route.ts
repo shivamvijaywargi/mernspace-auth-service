@@ -42,4 +42,8 @@ authRouter.post("/login", validateRequest(loginUserSchema), (req, res, next) =>
   authController.login(req, res, next),
 );
 
+authRouter.get("/self", (req, res, next) =>
+  authController.self(req, res, next),
+);
+
 export default authRouter;

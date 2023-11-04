@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
@@ -148,6 +148,11 @@ export class AuthController {
     } catch (error) {
       return next(error);
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  self(req: Request, res: Response, next: NextFunction) {
+    res.status(200).json({});
   }
 }
 
