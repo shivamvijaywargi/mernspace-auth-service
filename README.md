@@ -1,6 +1,6 @@
 # MERN Space Pizza Auth Service
 
-Welcome to the MERN Space Pizza Auth Service! This service is an essential component of the Space Pizza project, providing secure authentication and authorization functionalities. Built using Express, TypeScript, TypeORM, and PostgreSQL, it ensures your pizza orders and space adventures are protected.
+Welcome to the MERN Space Pizza Auth Service! This service is an essential component of the Space Pizza project, providing secure authentication and authorization functionalities. Built using Express, TypeScript, TypeORM, and PostgreSQL, it ensures your pizza orders and space adventures are protected😉.
 
 ## Table of Contents
 
