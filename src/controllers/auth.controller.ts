@@ -158,7 +158,7 @@ export class AuthController {
   async self(req: IAuthRequest, res: Response, next: NextFunction) {
     const user = await this.userService.findById(Number(req.auth.sub));
 
-    res.status(200).json(user);
+    res.status(200).json({ ...user, password: undefined });
   }
 }
 

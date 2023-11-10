@@ -80,6 +80,36 @@ describe("POST /auth/self", () => {
       });
 
       // Generate token
+      const accessToken = jwks.token({ sub: "1", role: data.role });
+
+      // Add token to cookie
+      const response = await request(app)
+        .get("/auth/self")
+        .set("Cookie", [`accessToken=${accessToken}`])
+        .send();
+
+      // ASSERT
+      // Check if user id matches with the registered user
+      expect((response.body as Record<string, string>).id).toBe(data.id);
+    });
+
+    it("should not return user password", async () => {
+      // Register user
+      const userData = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "password",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      const data = await userRepository.save({
+        ...userData,
+        role: Roles.CUSTOMER,
+      });
+
+      // Generate token
       const accessToken = jwks.token({ sub: String(data.id), role: data.role });
 
       // Add token to cookie
@@ -88,11 +118,10 @@ describe("POST /auth/self", () => {
         .set("Cookie", [`accessToken=${accessToken}`])
         .send();
 
-      expect((response.body as Record<string, string>).id).toBe(data.id);
+      // ASSERT
+      // Check if user id matches with the registered user
+      expect(response.body).not.toHaveProperty("password");
     });
-
-    // ASSERT
-    // Check if user id matches with the registered user
   });
 
   describe("Fields are missing", () => {});
