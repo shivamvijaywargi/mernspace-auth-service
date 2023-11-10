@@ -122,6 +122,29 @@ describe("POST /auth/self", () => {
       // Check if user id matches with the registered user
       expect(response.body).not.toHaveProperty("password");
     });
+
+    it("should return 401 status code if token does not exist", async () => {
+      // Register user
+      const userData = {
+        firstName: "Shivam",
+        lastName: "Vijaywargi",
+        email: "vjshivam5@gmail.com",
+        password: "password",
+      };
+
+      const userRepository = connection.getRepository(User);
+
+      await userRepository.save({
+        ...userData,
+        role: Roles.CUSTOMER,
+      });
+
+      // Add token to cookie
+      const response = await request(app).get("/auth/self").send();
+
+      // ASSERT
+      expect(response.statusCode).toBe(401);
+    });
   });
 
   describe("Fields are missing", () => {});

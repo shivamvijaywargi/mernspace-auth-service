@@ -11,12 +11,12 @@ import authRouter from "./routes/auth.route";
 
 const app = express();
 
+// middlewares
+app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-
-// Other middlewares
 
 // Routes
 // Health Check Route
@@ -44,7 +44,7 @@ app.all("*", (req, res) => {
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   logger.error(`Something went wrong: ${err.message}`);
 
-  const statusCode = err.statusCode || err.status || 500;
+  const statusCode = err.status || err.statusCode || 500;
   const message = err.message || "Internal Server Error";
 
   res.status(statusCode).json({
