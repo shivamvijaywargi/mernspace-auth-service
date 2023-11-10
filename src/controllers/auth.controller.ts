@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import createHttpError from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
@@ -6,7 +6,11 @@ import { Logger } from "winston";
 import { CredentialService } from "../services/credential.service";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
-import { ILoginUserRequest, IRegisterUserRequest } from "../types";
+import {
+  IAuthRequest,
+  ILoginUserRequest,
+  IRegisterUserRequest,
+} from "../types";
 
 export class AuthController {
   constructor(
@@ -151,8 +155,10 @@ export class AuthController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  self(req: Request, res: Response, next: NextFunction) {
-    res.status(200).json({});
+  async self(req: IAuthRequest, res: Response, next: NextFunction) {
+    const user = await this.userService.findById(Number(req.auth.sub));
+
+    res.status(200).json(user);
   }
 }
 

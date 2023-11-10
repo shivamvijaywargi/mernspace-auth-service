@@ -5,10 +5,12 @@ import { logger } from "../config/logger";
 import { AuthController } from "../controllers/auth.controller";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
+import authMiddleware from "../middlewares/auth.middleware";
 import { validateRequest } from "../middlewares/validateRequest.middleware";
 import { CredentialService } from "../services/credential.service";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
+import { IAuthRequest } from "../types";
 import {
   loginUserSchema,
   registerUserSchema,
@@ -42,8 +44,8 @@ authRouter.post("/login", validateRequest(loginUserSchema), (req, res, next) =>
   authController.login(req, res, next),
 );
 
-authRouter.get("/self", (req, res, next) =>
-  authController.self(req, res, next),
+authRouter.get("/self", authMiddleware, (req, res, next) =>
+  authController.self(req as IAuthRequest, res, next),
 );
 
 export default authRouter;

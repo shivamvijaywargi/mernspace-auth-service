@@ -19,3 +19,10 @@ export interface IRegisterUserRequest extends Request {
 export interface ILoginUserRequest extends Request {
   body: IUserLoginData;
 }
+
+export interface IAuthRequest extends Request {
+  auth: {
+    sub: string;
+    role: string;
+  };
+}

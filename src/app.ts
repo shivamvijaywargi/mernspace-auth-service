@@ -1,6 +1,7 @@
 import "dotenv/config";
 import "reflect-metadata";
 
+import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
 import morgan from "morgan";
@@ -10,6 +11,7 @@ import authRouter from "./routes/auth.route";
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
