@@ -228,6 +228,26 @@ export class AuthController {
       return next(error);
     }
   }
+
+  async logout(req: IAuthRequest, res: Response, next: NextFunction) {
+    try {
+      // Delete old refresh token
+      this.logger.info(`Deleting old refreshToken from the DB: ${req.auth.id}`);
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+      this.logger.info("User logged out successfully", { id: req.auth.id });
+
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+
+      res.status(200).json({
+        success: true,
+        message: `User logged out successfully`,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 // Functional way
