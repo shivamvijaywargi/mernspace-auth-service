@@ -46,15 +46,19 @@ export class AuthController {
       };
 
       const accessToken = this.tokenService.generateAccessToken(payload);
+      this.logger.info("Generated accessToken", payload);
 
       // Persist the refresh token in the DB
       const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+      this.logger.info("Persist refreshToken");
 
       const refreshToken = this.tokenService.generateRefreshToken({
         ...payload,
         id: String(newRefreshToken.id),
       });
+      this.logger.info("Generated refreshToken", payload);
 
+      this.logger.info("Set accessToken to cookie");
       res.cookie("accessToken", accessToken, {
         domain: "localhost",
         sameSite: "strict",
@@ -62,6 +66,7 @@ export class AuthController {
         httpOnly: true,
       });
 
+      this.logger.info("Set refreshToken to cookie");
       res.cookie("refreshToken", refreshToken, {
         domain: "localhost",
         sameSite: "strict",
@@ -119,15 +124,19 @@ export class AuthController {
       };
 
       const accessToken = this.tokenService.generateAccessToken(payload);
+      this.logger.info("Generated accessToken", payload);
 
       // Persist the refresh token in the DB
       const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+      this.logger.info("Persist refreshToken");
 
       const refreshToken = this.tokenService.generateRefreshToken({
         ...payload,
         id: String(newRefreshToken.id),
       });
+      this.logger.info("Generated refreshToken", payload);
 
+      this.logger.info("Set accessToken to cookie");
       res.cookie("accessToken", accessToken, {
         domain: "localhost",
         sameSite: "strict",
@@ -135,6 +144,7 @@ export class AuthController {
         httpOnly: true,
       });
 
+      this.logger.info("Set refreshToken to cookie");
       res.cookie("refreshToken", refreshToken, {
         domain: "localhost",
         sameSite: "strict",
@@ -159,6 +169,64 @@ export class AuthController {
     const user = await this.userService.findById(Number(req.auth.sub));
 
     res.status(200).json({ ...user, password: undefined });
+  }
+
+  async refresh(req: IAuthRequest, res: Response, next: NextFunction) {
+    try {
+      const payload: JwtPayload = {
+        sub: req.auth.sub,
+        role: req.auth.role,
+      };
+
+      const user = await this.userService.findById(Number(req.auth.sub));
+
+      if (!user) {
+        return next(createHttpError(400, "User with the token does not exist"));
+      }
+
+      const accessToken = this.tokenService.generateAccessToken(payload);
+      this.logger.info("Generated accessToken", payload);
+
+      // Persist the refresh token in the DB
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+      this.logger.info("Persist refreshToken");
+
+      // Delete old refresh token
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+      this.logger.info("Delete old refreshToken from the DB");
+
+      const refreshToken = this.tokenService.generateRefreshToken({
+        ...payload,
+        id: String(newRefreshToken.id),
+      });
+      this.logger.info("Generated refreshToken", payload);
+
+      this.logger.info("Set accessToken to cookie");
+      res.cookie("accessToken", accessToken, {
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60, // 1 hour
+        httpOnly: true,
+      });
+
+      this.logger.info("Set refreshToken to cookie");
+      res.cookie("refreshToken", refreshToken, {
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+        httpOnly: true,
+      });
+
+      this.logger.info("User has been logged in", { id: user.id });
+
+      res.status(200).json({
+        success: true,
+        message: `Token refreshed successfully`,
+        id: user.id,
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

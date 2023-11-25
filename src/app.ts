@@ -42,10 +42,10 @@ app.all("*", (req, res) => {
 // Gloabl error middleware
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-  logger.error(`Something went wrong: ${err.message}`);
-
   const statusCode = err.status || err.statusCode || 500;
   const message = err.message || "Internal Server Error";
+
+  logger.error(`Something went wrong: ${message}`);
 
   res.status(statusCode).json({
     success: false,

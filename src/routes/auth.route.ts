@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
 import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
@@ -7,6 +7,7 @@ import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import authMiddleware from "../middlewares/auth.middleware";
 import { validateRequest } from "../middlewares/validateRequest.middleware";
+import validateTokenMiddleware from "../middlewares/validateToken.middleware";
 import { CredentialService } from "../services/credential.service";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
@@ -46,6 +47,13 @@ authRouter.post("/login", validateRequest(loginUserSchema), (req, res, next) =>
 
 authRouter.get("/self", authMiddleware, (req, res, next) =>
   authController.self(req as IAuthRequest, res, next),
+);
+
+authRouter.post(
+  "/refresh",
+  validateTokenMiddleware,
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.refresh(req as IAuthRequest, res, next),
 );
 
 export default authRouter;
