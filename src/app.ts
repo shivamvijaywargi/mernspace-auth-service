@@ -8,6 +8,7 @@ import morgan from "morgan";
 
 import { logger } from "./config/logger";
 import authRouter from "./routes/auth.route";
+import tenantRouter from "./routes/tenant.route";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.get("/health-check", (req, res) => {
 
 // Auth routes
 app.use("/auth", authRouter);
+app.use("/tenants", tenantRouter);
 
 // CatchAll - 404
 app.all("*", (req, res) => {
