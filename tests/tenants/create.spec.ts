@@ -80,7 +80,7 @@ describe("POST /tenants", () => {
       expect(tenants[0].address).toBe(payload.address);
     });
 
-    it("should return 401 is user is not authenticated", async () => {
+    it("should return 401 if user is not authenticated", async () => {
       // ARRANGE
       const payload = {
         name: "Tenant Name",
@@ -97,6 +97,31 @@ describe("POST /tenants", () => {
       const tenants = await tenantRepository.find();
 
       // ASSERT
+      expect(tenants).toHaveLength(0);
+    });
+
+    it("should return 403 if user is not an ADMIN", async () => {
+      // ARRANGE
+      const payload = {
+        name: "Tenant Name",
+        address: "Tenant Address",
+      };
+
+      // Generate token
+      const managerToken = jwks.token({ sub: "1", role: Roles.MANAGER });
+
+      // ACT
+      const response = await request(app)
+        .post("/tenants")
+        .set("Cookie", [`accessToken=${managerToken}`])
+        .send(payload);
+
+      const tenantRepository = connection.getRepository(Tenant);
+
+      const tenants = await tenantRepository.find();
+
+      // ASSERT
+      expect(response.statusCode).toBe(403);
       expect(tenants).toHaveLength(0);
     });
   });
