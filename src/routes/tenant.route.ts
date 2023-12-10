@@ -4,6 +4,7 @@ import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
 import { TenantController } from "../controllers/tenant.controller";
 import { Tenant } from "../entity/Tenant";
+import authMiddleware from "../middlewares/auth.middleware";
 import { TenantService } from "../services/tenant.service";
 
 const tenantRouter = Router();
@@ -12,7 +13,7 @@ const tenantRepository = AppDataSource.getRepository(Tenant);
 const tenantService = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantService, logger);
 
-tenantRouter.post("/", (req, res, next) =>
+tenantRouter.post("/", authMiddleware, (req, res, next) =>
   tenantController.create(req, res, next),
 );
 
