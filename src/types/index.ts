@@ -5,7 +5,7 @@ export interface IUserRegisterData {
   lastName: string;
   email: string;
   password: string;
-  role: string;
+  role?: string;
 }
 
 export interface IUserUpdateData extends Partial<IUserRegisterData> {}
