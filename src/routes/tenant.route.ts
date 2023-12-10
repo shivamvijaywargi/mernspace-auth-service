@@ -12,7 +12,7 @@ import { TenantService } from "../services/tenant.service";
 import {
   createTenantSchema,
   updateTenantSchema,
-} from "../validations/auth.validation";
+} from "../validations/tenant.validation";
 
 const tenantRouter = Router();
 

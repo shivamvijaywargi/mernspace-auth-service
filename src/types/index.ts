@@ -5,7 +5,10 @@ export interface IUserRegisterData {
   lastName: string;
   email: string;
   password: string;
+  role: string;
 }
+
+export interface IUserUpdateData extends Partial<IUserRegisterData> {}
 
 export interface IUserLoginData {
   email: string;
@@ -18,6 +21,10 @@ export interface IRegisterUserRequest extends Request {
 
 export interface ILoginUserRequest extends Request {
   body: IUserLoginData;
+}
+
+export interface IUpdateUserRequest extends Request {
+  body: IUserUpdateData;
 }
 
 export interface IAuthRequest extends Request {

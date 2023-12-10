@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 
 import { Roles } from "../constants";
 import { User } from "../entity/User";
-import { IUserRegisterData } from "../types";
+import { IUserRegisterData, IUserUpdateData } from "../types";
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
@@ -40,10 +40,40 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
-    return await this.userRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({
+      where: { email },
+      select: ["id", "firstName", "lastName", "email", "role", "password"],
+    });
   }
 
   async findById(id: number) {
     return await this.userRepository.findOne({ where: { id } });
+  }
+
+  async update(
+    userId: number,
+    { firstName, lastName, role }: Partial<IUserUpdateData>,
+  ) {
+    try {
+      return await this.userRepository.update(userId, {
+        firstName,
+        lastName,
+        role,
+      });
+    } catch (err) {
+      const error = createHttpError(
+        500,
+        "Failed to update the user in the database",
+      );
+      throw error;
+    }
+  }
+
+  async getAll() {
+    return await this.userRepository.find();
+  }
+
+  async deleteById(userId: number) {
+    return await this.userRepository.delete(userId);
   }
 }
