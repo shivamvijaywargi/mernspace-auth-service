@@ -2,14 +2,20 @@ import bcrypt from "bcryptjs";
 import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 
-import { Roles } from "../constants";
 import { User } from "../entity/User";
 import { IUserRegisterData, IUserUpdateData } from "../types";
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
-  async create({ firstName, lastName, email, password }: IUserRegisterData) {
+  async create({
+    firstName,
+    lastName,
+    email,
+    password,
+    tenantId,
+    role,
+  }: IUserRegisterData) {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (user) {
@@ -27,7 +33,8 @@ export class UserService {
         lastName,
         email,
         password: hashedPassword,
-        role: Roles.CUSTOMER,
+        role,
+        tenantId,
       });
     } catch (err) {
       const error = createHttpError(

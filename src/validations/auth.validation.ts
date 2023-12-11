@@ -29,6 +29,7 @@ const userBodySchema = z.object({
     .trim()
     .min(8, "Password must be atleast 8 characters long"),
   role: z.enum([Roles.ADMIN, Roles.MANAGER, Roles.CUSTOMER]).optional(),
+  tenantId: z.number().optional(),
 });
 
 export const registerUserSchema = z.object({

@@ -6,6 +6,7 @@ export interface IUserRegisterData {
   email: string;
   password: string;
   role?: string;
+  tenantId?: number;
 }
 
 export interface IUserUpdateData extends Partial<IUserRegisterData> {}
