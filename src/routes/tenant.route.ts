@@ -32,8 +32,11 @@ tenantRouter.get("/", (req, res, next) =>
   tenantController.findAll(req, res, next),
 );
 
-tenantRouter.get("/:id", (req, res, next) =>
-  tenantController.findOne(req, res, next),
+tenantRouter.get(
+  "/:id",
+  authMiddleware,
+  canAccess([Roles.ADMIN]),
+  (req, res, next) => tenantController.findOne(req, res, next),
 );
 
 tenantRouter.patch(
