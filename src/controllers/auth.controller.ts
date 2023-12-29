@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 
+import { Roles } from "../constants";
 import { CredentialService } from "../services/credential.service";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
@@ -36,6 +37,7 @@ export class AuthController {
         lastName,
         email,
         password,
+        role: Roles.CUSTOMER,
       });
 
       this.logger.info(`User has been registered`, { id: user.id });
