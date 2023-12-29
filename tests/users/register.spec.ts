@@ -5,8 +5,9 @@ import app from "../../src/app";
 import { AppDataSource } from "../../src/config/data-source";
 import { Roles } from "../../src/constants";
 import { RefreshToken } from "../../src/entity/RefreshToken";
+import { Tenant } from "../../src/entity/Tenant";
 import { User } from "../../src/entity/User";
-import { isJWT } from "../utils";
+import { createTenant, isJWT } from "../utils";
 
 describe("POST /auth/register", () => {
   let connection: DataSource;
@@ -62,12 +63,16 @@ describe("POST /auth/register", () => {
     });
 
     it("Should persist the user in the database", async () => {
+      const tenant = await createTenant(connection.getRepository(Tenant));
+
       // Arrange
       const userData = {
         firstName: "Shivam",
         lastName: "Vijaywargi",
         email: "vjshivam5@gmail.com",
         password: "password",
+        tenantId: tenant.id,
+        role: Roles.MANAGER,
       };
 
       // Act
@@ -139,7 +144,7 @@ describe("POST /auth/register", () => {
       // ASSERT
       const userRepository = connection.getRepository(User);
 
-      const users = await userRepository.find();
+      const users = await userRepository.find({ select: ["password"] });
 
       expect(users[0].password).not.toBe(payload.password);
       expect(users[0].password).toHaveLength(60);

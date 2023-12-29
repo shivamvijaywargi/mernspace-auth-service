@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
 
-import { Roles } from "../constants";
 import { UserService } from "../services/user.service";
 import { IRegisterUserRequest, IUpdateUserRequest } from "../types";
 
@@ -16,7 +15,7 @@ export class UserController {
   async create(req: IRegisterUserRequest, res: Response, next: NextFunction) {
     // Validation
 
-    const { firstName, lastName, email, password, tenantId } = req.body;
+    const { firstName, lastName, email, password, tenantId, role } = req.body;
     try {
       const user = await this.userService.create({
         firstName,
@@ -24,7 +23,7 @@ export class UserController {
         email,
         password,
         tenantId,
-        role: Roles.MANAGER,
+        role,
       });
       res.status(201).json({ id: user.id });
     } catch (err) {

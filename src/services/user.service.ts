@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 
+import { logger } from "../config/logger";
 import { User } from "../entity/User";
 import { IUserRegisterData, IUserUpdateData } from "../types";
 
@@ -34,9 +35,11 @@ export class UserService {
         email,
         password: hashedPassword,
         role,
-        tenantId,
+        tenantId: tenantId ? { id: tenantId } : undefined,
       });
     } catch (err) {
+      logger.error(err);
+
       const error = createHttpError(
         500,
         "Failed to create user in the database",
@@ -68,6 +71,8 @@ export class UserService {
         role,
       });
     } catch (err) {
+      logger.error(err);
+
       const error = createHttpError(
         500,
         "Failed to update the user in the database",
