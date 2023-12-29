@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   // synchronize should be false in produciton, keep it always false, since we have beforeEach() blcok setup in tests (register.spec.ts)
   synchronize: false,
   logging: false,
-  entities: ["src/entity/*.ts"],
-  migrations: ["src/migrations/*.ts"],
+  entities: ["src/entity/*.{ts,js}"],
+  migrations: ["src/migrations/*.{ts,js}"],
   subscribers: [],
 });
