@@ -1,4 +1,10 @@
-import { NextFunction, Request, Response, Router } from "express";
+import {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+  Router,
+} from "express";
 
 import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
@@ -35,34 +41,52 @@ const authController = new AuthController(
 );
 
 // authController bind Read more: https://www.freecodecamp.org/news/this-is-why-we-need-to-bind-event-handlers-in-class-components-in-react-f7ea1a6f93eb/
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 authRouter.post(
   "/register",
-  validateRequest(registerUserSchema),
-  (req, res, next) => authController.register(req, res, next),
+  validateRequest(registerUserSchema) as RequestHandler,
+  (req, res, next) =>
+    authController.register(req, res, next) as unknown as RequestHandler,
 );
 
-authRouter.post("/login", validateRequest(loginUserSchema), (req, res, next) =>
-  authController.login(req, res, next),
+authRouter.post(
+  "/login",
+  validateRequest(loginUserSchema) as RequestHandler,
+  (req, res, next) =>
+    authController.login(req, res, next) as unknown as RequestHandler,
 );
 
-authRouter.get("/self", authMiddleware, (req, res, next) =>
-  authController.self(req as IAuthRequest, res, next),
+authRouter.get(
+  "/self",
+  authMiddleware as RequestHandler,
+  (req, res, next) =>
+    authController.self(
+      req as IAuthRequest,
+      res,
+      next,
+    ) as unknown as RequestHandler,
 );
 
 authRouter.post(
   "/refresh",
-  validateTokenMiddleware,
+  validateTokenMiddleware as RequestHandler,
   (req: Request, res: Response, next: NextFunction) =>
-    authController.refresh(req as IAuthRequest, res, next),
+    authController.refresh(
+      req as IAuthRequest,
+      res,
+      next,
+    ) as unknown as RequestHandler,
 );
 
 authRouter.post(
   "/logout",
-  authMiddleware,
-  parseRefreshTokenMiddleware,
+  authMiddleware as RequestHandler,
+  parseRefreshTokenMiddleware as RequestHandler,
   (req: Request, res: Response, next: NextFunction) =>
-    authController.logout(req as IAuthRequest, res, next),
+    authController.logout(
+      req as IAuthRequest,
+      res,
+      next,
+    ) as unknown as RequestHandler,
 );
 
 export default authRouter;

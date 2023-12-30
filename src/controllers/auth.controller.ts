@@ -251,12 +251,3 @@ export class AuthController {
     }
   }
 }
-
-// Functional way
-// const register: RequestHandler = async (req, res) => {
-//   res.status(201).send("Registered");
-// };
-
-// export default {
-//   register,
-// };

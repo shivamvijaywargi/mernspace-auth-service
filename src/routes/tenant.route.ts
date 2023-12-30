@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { RequestHandler, Router } from "express";
 
 import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
@@ -22,37 +22,43 @@ const tenantController = new TenantController(tenantService, logger);
 
 tenantRouter.post(
   "/",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  validateRequest(createTenantSchema),
-  (req, res, next) => tenantController.create(req, res, next),
+  validateRequest(createTenantSchema) as RequestHandler,
+  (req, res, next) =>
+    tenantController.create(req, res, next) as unknown as RequestHandler,
 );
 
-tenantRouter.get("/", (req, res, next) =>
-  tenantController.findAll(req, res, next),
+tenantRouter.get(
+  "/",
+  (req, res, next) =>
+    tenantController.findAll(req, res, next) as unknown as RequestHandler,
 );
 
 tenantRouter.get(
   "/:id",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  (req, res, next) => tenantController.findOne(req, res, next),
+  (req, res, next) =>
+    tenantController.findOne(req, res, next) as unknown as RequestHandler,
 );
 
 tenantRouter.patch(
   "/:id",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  validateRequest(updateTenantSchema),
-  (req, res, next) => tenantController.update(req, res, next),
+  validateRequest(updateTenantSchema) as RequestHandler,
+  (req, res, next) =>
+    tenantController.update(req, res, next) as unknown as RequestHandler,
 );
 
 tenantRouter.delete(
   "/:id",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  validateRequest(updateTenantSchema),
-  (req, res, next) => tenantController.delete(req, res, next),
+  validateRequest(updateTenantSchema) as RequestHandler,
+  (req, res, next) =>
+    tenantController.delete(req, res, next) as unknown as RequestHandler,
 );
 
 export default tenantRouter;
