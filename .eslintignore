@@ -1,5 +1,5 @@
 *.js
 dist
-node_modules/
+node_modules
 *.spec.ts
-tests/
+tests

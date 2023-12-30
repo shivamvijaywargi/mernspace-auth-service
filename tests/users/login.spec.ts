@@ -106,8 +106,8 @@ describe("POST /auth/login", () => {
       };
 
       // ACT
-      let accessToken = null;
-      let refreshToken = null;
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
 
       await request(app).post("/auth/register").send(payload);
       const response = await request(app).post("/auth/login").send(payload);
@@ -117,7 +117,8 @@ describe("POST /auth/login", () => {
       }
 
       // ASSERT
-      const cookies = (response.headers as IHeaders)["set-cookie"] || [];
+      const cookies =
+        (response.headers as unknown as IHeaders)["set-cookie"] || [];
 
       cookies.forEach((cookie) => {
         if (cookie.startsWith("accessToken=")) {

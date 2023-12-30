@@ -184,8 +184,8 @@ describe("POST /auth/register", () => {
       };
 
       // ACT
-      let accessToken = null;
-      let refreshToken = null;
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
 
       const response = await request(app).post("/auth/register").send(payload);
 
@@ -194,7 +194,8 @@ describe("POST /auth/register", () => {
       }
 
       // ASSERT
-      const cookies = (response.headers as IHeaders)["set-cookie"] || [];
+      const cookies =
+        (response.headers as unknown as IHeaders)["set-cookie"] || [];
 
       cookies.forEach((cookie) => {
         if (cookie.startsWith("accessToken=")) {
