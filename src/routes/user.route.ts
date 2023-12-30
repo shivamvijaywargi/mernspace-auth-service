@@ -1,4 +1,4 @@
-import express, { NextFunction, Response } from "express";
+import express, { NextFunction, RequestHandler, Response } from "express";
 
 import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
@@ -23,35 +23,44 @@ const userController = new UserController(userService, logger);
 
 router.post(
   "/",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  validateRequest(registerUserSchema),
+  validateRequest(registerUserSchema) as RequestHandler,
   (req: IRegisterUserRequest, res: Response, next: NextFunction) =>
-    userController.create(req, res, next),
+    userController.create(req, res, next) as unknown as RequestHandler,
 );
 
 router.patch(
   "/:id",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  validateRequest(updateUserSchema),
+  validateRequest(updateUserSchema) as RequestHandler,
   (req: IUpdateUserRequest, res: Response, next: NextFunction) =>
-    userController.update(req, res, next),
+    userController.update(req, res, next) as unknown as RequestHandler,
 );
 
-router.get("/", authMiddleware, canAccess([Roles.ADMIN]), (req, res, next) =>
-  userController.getAll(req, res, next),
+router.get(
+  "/",
+  authMiddleware as RequestHandler,
+  canAccess([Roles.ADMIN]),
+  (req, res, next) =>
+    userController.getAll(req, res, next) as unknown as RequestHandler,
 );
 
-router.get("/:id", authMiddleware, canAccess([Roles.ADMIN]), (req, res, next) =>
-  userController.getOne(req, res, next),
+router.get(
+  "/:id",
+  authMiddleware as RequestHandler,
+  canAccess([Roles.ADMIN]),
+  (req, res, next) =>
+    userController.getOne(req, res, next) as unknown as RequestHandler,
 );
 
 router.delete(
   "/:id",
-  authMiddleware,
+  authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
-  (req, res, next) => userController.destroy(req, res, next),
+  (req, res, next) =>
+    userController.destroy(req, res, next) as unknown as RequestHandler,
 );
 
 export default router;
