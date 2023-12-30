@@ -7,4 +7,7 @@ module.exports = {
     '@/(.*)': '<rootDir>/src/$1',
   },
   verbose: true,
+  collectCoverage: true,
+  coverageProvider: 'v8',
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts', '!<rootDir>/tests/**', '!**/node_modules/**'],
 };
