@@ -19,6 +19,8 @@ Welcome to the MERN Space Pizza Auth Service! This service is an essential compo
 
 4. **Token Mechanism:** The service utilizes a refresh token and access token mechanism for secure user authentication, ensuring that only authorized users can access your pizza and space adventures.
 
+5. **Unit Tests:** Unit tests are written to ensure the quality and reliability of the service.
+
 ## Getting Started
 
 To get started with the MERN Space Pizza Auth Service, follow these steps:
