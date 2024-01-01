@@ -2,10 +2,12 @@ import "dotenv/config";
 import "reflect-metadata";
 
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
 import morgan from "morgan";
 
+import { CONFIG } from "./config";
 import { logger } from "./config/logger";
 import authRouter from "./routes/auth.route";
 import tenantRouter from "./routes/tenant.route";
@@ -13,6 +15,13 @@ import tenantRouter from "./routes/tenant.route";
 const app = express();
 
 // middlewares
+app.use(
+  cors({
+    origin: [CONFIG.CORS_ORIGIN],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  }),
+);
 app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.json());
