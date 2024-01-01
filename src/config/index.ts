@@ -21,6 +21,7 @@ const {
   REFRESH_TOKEN_SECRET,
   JWKS_URI,
   PRIVATE_KEY,
+  CORS_ORIGIN,
 } = process.env;
 
 export const CONFIG = {
@@ -35,4 +36,5 @@ export const CONFIG = {
   REFRESH_TOKEN_SECRET: REFRESH_TOKEN_SECRET || "secretKey",
   JWKS_URI,
   PRIVATE_KEY,
+  CORS_ORIGIN: CORS_ORIGIN || "http://localhost:5173",
 };
