@@ -3,12 +3,11 @@ import "reflect-metadata";
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { NextFunction, Request, Response } from "express";
-import { HttpError } from "http-errors";
+import express from "express";
 import morgan from "morgan";
 
 import { CONFIG } from "./config";
-import { logger } from "./config/logger";
+import { errorHandler } from "./middlewares/errorHandler.middleware";
 import authRouter from "./routes/auth.route";
 import tenantRouter from "./routes/tenant.route";
 
@@ -51,24 +50,6 @@ app.all("*", (req, res) => {
 });
 
 // Gloabl error middleware
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-  const statusCode = err.status || err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-
-  logger.error(`Something went wrong: ${message}`);
-
-  res.status(statusCode).json({
-    success: false,
-    errors: [
-      {
-        type: err.name,
-        message,
-        path: "",
-        location: "",
-      },
-    ],
-  });
-});
+app.use(errorHandler);
 
 export default app;

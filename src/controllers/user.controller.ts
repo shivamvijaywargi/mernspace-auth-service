@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
 
@@ -13,9 +12,8 @@ export class UserController {
   ) {}
 
   async create(req: IRegisterUserRequest, res: Response, next: NextFunction) {
-    // Validation
-
     const { firstName, lastName, email, password, tenantId, role } = req.body;
+
     try {
       const user = await this.userService.create({
         firstName,
@@ -34,12 +32,6 @@ export class UserController {
   async update(req: IUpdateUserRequest, res: Response, next: NextFunction) {
     // In our project: We are not allowing user to change the email id since it is used as username
     // In our project: We are not allowing admin user to change others password
-
-    // Validation
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
-      return res.status(400).json({ errors: result.array() });
-    }
 
     const { firstName, lastName, role } = req.body;
     const userId = req.params.id;
