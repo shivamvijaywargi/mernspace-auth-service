@@ -10,6 +10,7 @@ import { CONFIG } from "./config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import authRouter from "./routes/auth.route";
 import tenantRouter from "./routes/tenant.route";
+import usersRouter from "./routes/user.route";
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.get("/health-check", (req, res) => {
 // Auth routes
 app.use("/auth", authRouter);
 app.use("/tenants", tenantRouter);
+app.use("/users", usersRouter);
 
 // CatchAll - 404
 app.all("*", (req, res) => {
