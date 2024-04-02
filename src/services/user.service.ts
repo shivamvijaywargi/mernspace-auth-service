@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { logger } from "../config/logger";
 import { User } from "../entity/User";
 import { IUserRegisterData, IUserUpdateData } from "../types";
+import { UserQuery } from "../validations/user.validation";
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
@@ -86,8 +87,17 @@ export class UserService {
     }
   }
 
-  async getAll() {
-    return await this.userRepository.find();
+  async getAll(queryParams: UserQuery) {
+    const { limit = 6, page = 1 } = queryParams;
+
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.userRepository.createQueryBuilder();
+
+    const result = await queryBuilder.skip(skip).take(limit).getManyAndCount();
+
+    return result;
+    // return await this.userRepository.find();
   }
 
   async deleteById(userId: number) {

@@ -14,6 +14,7 @@ import {
   registerUserSchema,
   updateUserSchema,
 } from "../validations/auth.validation";
+import { getUserQuerySchema } from "../validations/user.validation";
 
 const router = express.Router();
 
@@ -43,6 +44,7 @@ router.get(
   "/",
   authMiddleware as RequestHandler,
   canAccess([Roles.ADMIN]),
+  validateRequest(getUserQuerySchema) as RequestHandler,
   (req, res, next) =>
     userController.getAll(req, res, next) as unknown as RequestHandler,
 );

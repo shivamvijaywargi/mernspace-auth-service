@@ -4,6 +4,7 @@ import { Logger } from "winston";
 
 import { UserService } from "../services/user.service";
 import { IRegisterUserRequest, IUpdateUserRequest } from "../types";
+import { UserQuery } from "../validations/user.validation";
 
 export class UserController {
   constructor(
@@ -59,11 +60,18 @@ export class UserController {
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
+    const queryParams = req.query as UserQuery;
+
     try {
-      const users = await this.userService.getAll();
+      const [users, count] = await this.userService.getAll(queryParams);
 
       this.logger.info("All users have been fetched");
-      res.json(users);
+      res.json({
+        currentPage: queryParams.page ?? 1,
+        perPage: queryParams.limit ?? 6,
+        total: count,
+        data: users,
+      });
     } catch (err) {
       next(err);
     }
