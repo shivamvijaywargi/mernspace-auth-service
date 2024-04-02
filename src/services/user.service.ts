@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import createHttpError from "http-errors";
-import { Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 
 import { logger } from "../config/logger";
 import { User } from "../entity/User";
@@ -88,16 +88,35 @@ export class UserService {
   }
 
   async getAll(queryParams: UserQuery) {
-    const { limit = 6, page = 1 } = queryParams;
+    const { limit = 6, page = 1, q = "", role = "" } = queryParams;
 
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.userRepository.createQueryBuilder();
+    const queryBuilder = this.userRepository.createQueryBuilder("user");
 
-    const result = await queryBuilder.skip(skip).take(limit).getManyAndCount();
+    if (q) {
+      const searchTerm = `%${q}%`;
+
+      queryBuilder.where(
+        new Brackets((qb) => {
+          qb.where(`CONCAT (user.firstName, ' ', user.lastName) ILIKE :q`, {
+            q: searchTerm,
+          }).orWhere(`user.email ILIKE :q`, { q: searchTerm });
+        }),
+      );
+    }
+
+    if (role) {
+      queryBuilder.andWhere(`role = :role`, { role });
+    }
+
+    const result = await queryBuilder
+      .skip(skip)
+      .take(limit)
+      .orderBy("user.id", "DESC")
+      .getManyAndCount();
 
     return result;
-    // return await this.userRepository.find();
   }
 
   async deleteById(userId: number) {

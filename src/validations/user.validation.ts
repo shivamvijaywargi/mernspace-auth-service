@@ -17,6 +17,8 @@ const userQuerySchema = z.object({
     .min(1)
     .default(6)
     .optional(),
+  q: z.coerce.string().trim().optional(),
+  role: z.coerce.string().trim().optional(),
 });
 
 export const getUserQuerySchema = z.object({
