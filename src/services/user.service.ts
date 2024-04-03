@@ -111,6 +111,7 @@ export class UserService {
     }
 
     const result = await queryBuilder
+      .leftJoinAndSelect("user.tenant", "tenant")
       .skip(skip)
       .take(limit)
       .orderBy("user.id", "DESC")

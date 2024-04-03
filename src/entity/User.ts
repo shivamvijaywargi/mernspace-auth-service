@@ -32,9 +32,9 @@ export class User {
   @ManyToOne(() => Tenant)
   tenant: Tenant;
 
-  @UpdateDateColumn()
+  @CreateDateColumn()
   createdAt: number;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updatedAt: number;
 }
