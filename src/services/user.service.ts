@@ -68,13 +68,15 @@ export class UserService {
 
   async update(
     userId: number,
-    { firstName, lastName, role }: Partial<IUserUpdateData>,
+    { firstName, lastName, role, email, tenantId }: Partial<IUserUpdateData>,
   ) {
     try {
       return await this.userRepository.update(userId, {
         firstName,
         lastName,
         role,
+        email,
+        tenant: tenantId ? { id: tenantId } : undefined,
       });
     } catch (err) {
       logger.error(err);

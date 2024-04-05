@@ -34,7 +34,7 @@ export class UserController {
     // In our project: We are not allowing user to change the email id since it is used as username
     // In our project: We are not allowing admin user to change others password
 
-    const { firstName, lastName, role } = req.body;
+    const { firstName, lastName, role, tenantId, email } = req.body;
     const userId = req.params.id;
 
     if (isNaN(Number(userId))) {
@@ -49,6 +49,8 @@ export class UserController {
         firstName,
         lastName,
         role,
+        email,
+        tenantId,
       });
 
       this.logger.info("User has been updated", { id: userId });
