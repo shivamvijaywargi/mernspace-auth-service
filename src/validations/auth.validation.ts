@@ -26,8 +26,7 @@ const userBodySchema = z.object({
     .string({
       required_error: "Password is required",
     })
-    .trim()
-    .min(8, "Password must be atleast 8 characters long"),
+    .min(8, "Password must be at least 8 characters long"),
   role: z.enum([Roles.ADMIN, Roles.MANAGER, Roles.CUSTOMER]).optional(),
   tenantId: z.number().optional(),
 });
@@ -49,8 +48,7 @@ export const loginUserSchema = z.object({
       .string({
         required_error: "Password is required",
       })
-      .trim()
-      .min(8, "Password must be atleast 8 characters long"),
+      .min(8, "Password must be at least 8 characters long"),
   }),
 });
 
