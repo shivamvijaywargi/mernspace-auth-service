@@ -30,6 +30,7 @@ export interface IUpdateUserRequest extends Request {
 
 export interface IAuthRequest extends Request {
   auth: {
+    tenant: string;
     sub: string;
     role: string;
     id?: string;
